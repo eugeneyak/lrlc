@@ -22,4 +22,42 @@ class Telegram::Bot
       can_read_all_group_messages: data["can_read_all_group_messages"],
     )
   end
+
+  def message(user, text, **payload)
+    chat_id =
+      case user
+      when Integer
+        user
+      when Telegram::Data::User
+        user.id
+      end
+
+    client.post "sendMessage",
+      chat_id: chat_id,
+      text: text,
+      **payload
+  end
+
+  def media_group(user, media)
+    client.post "sendMediaGroup",
+      chat_id: destination(user),
+      media: media
+  end
+
+  def delete(user, message)
+    client.post "deleteMessage",
+      chat_id: destination(user),
+      message_id: message
+  end
+
+  private
+
+  def destination(user)
+    case user
+    when Integer
+      user
+    when Telegram::Data::User
+      user.id
+    end
+  end
 end

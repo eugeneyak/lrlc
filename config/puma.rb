@@ -1,4 +1,4 @@
-require_relative '../telegram'
+# require_relative '../telegram'
 
 hook = Telegram::Webhook.new
 

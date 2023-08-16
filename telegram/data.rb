@@ -10,9 +10,10 @@ module Telegram::Data
     :can_read_all_group_messages
   )
 
-  User = Data.define(:id, :is_bot, :first_name, :last_name, :username, :language_code)
+  User = Data.define(:id)
 
   Message = Data.define(:id, :text)
+  Command = Data.define(:id, :command)
 
   Photo = Data.define(:id, :file_id, :caption)
 end
