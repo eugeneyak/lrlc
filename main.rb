@@ -1,7 +1,7 @@
 require_relative 'config/database'
 require_relative 'telegram'
 
-# bot = Telegram::Bot.new
+bot = Telegram::Bot.new
 
 Telegram::Receiver::Polling.new.call
 

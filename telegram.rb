@@ -7,19 +7,9 @@ require_relative 'telegram/bot'
 require_relative 'telegram/message'
 require_relative 'telegram/receiver/polling'
 require_relative 'telegram/receiver/webhook'
-# require_relative 'telegram/data'
-# require_relative 'telegram/update'
-# require_relative 'registry'
 require_relative 'state'
 require_relative 'processor'
 
-
-Dir[File.join __dir__, "states", "*.rb"].each do
+Dir[File.join __dir__, "commands", "**", "*.rb"].each do
   require _1
 end
-
-# require_relative 'action'
-#
-# Dir[File.join __dir__, "actions", "**", "*.rb"].each do
-#   require _1
-# end

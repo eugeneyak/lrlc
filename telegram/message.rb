@@ -28,21 +28,24 @@ class Telegram::Message
   attr_reader :id, :from, :chat, :payload
 
   def text?
-    !!payload[:text]
+    !!text
+  end
+
+  def text
+    payload[:text]
   end
 
   def command?
-    command = if entities
-      entities.find { |e| e[:type] == "bot_command" }
-    end
-
     !!command
   end
 
   def command
-    command = if entities
-      entities.find { |e| e[:type] == "bot_command" }
-    end
+    return unless entities
+
+    command = entities
+      .find { |e| e[:type] == "bot_command" }
+
+    return unless command
 
     offset = command[:offset] + 1
     length = command[:length]
@@ -52,6 +55,14 @@ class Telegram::Message
 
   def photo?
     !!payload[:photo]
+  end
+
+  def photo
+    return unless payload[:photo]
+    return unless payload[:photo].first
+    return unless payload[:photo].first[:file_id]
+
+    payload[:photo].first[:file_id]
   end
 
   def entities

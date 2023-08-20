@@ -18,8 +18,6 @@ module Telegram::Receiver
 
           message = Telegram::Message.new(**data)
 
-          p message
-
           ::Processor.new(message).call
 
           self.offset = update[:update_id]

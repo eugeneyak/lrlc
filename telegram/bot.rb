@@ -23,16 +23,8 @@ class Telegram::Bot
   end
 
   def message(user, text, **payload)
-    chat_id =
-      case user
-      when Integer
-        user
-      when Telegram::Data::User
-        user.id
-      end
-
     client.post "sendMessage",
-      chat_id: chat_id,
+      chat_id: destination(user),
       text: text,
       **payload
   end
@@ -53,10 +45,10 @@ class Telegram::Bot
 
   def destination(user)
     case user
+    when Telegram::User
+      user.id
     when Integer
       user
-    when Telegram::Data::User
-      user.id
     end
   end
 end
