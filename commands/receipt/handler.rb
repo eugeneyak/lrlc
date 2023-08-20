@@ -81,7 +81,10 @@ module Command
       def handle_finish
         state.delete
 
-        bot.message message.from, "Красава"
+        bot.message message.from, "Красава",
+          reply_markup: {
+            remove_keyboard: true,
+          }
       end
     end
   end
