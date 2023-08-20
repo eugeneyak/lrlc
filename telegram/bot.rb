@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'webhook'
 require_relative 'client'
 
 class Telegram::Bot
   def initialize
-    @client = ENV.fetch("TOKEN").then { Telegram::Client.new(_1) }
+    @client = Telegram::Client.new
   end
 
   attr_reader :client

@@ -158,8 +158,10 @@ DB = Sequel.connect('postgres://localhost:5432/lrlc')
 DB.extension :pg_json
 
 DB.create_table :states, if_not_exists: true do
-  column :user,    :bigint, null: false, primary_key: true
+  column :user,    :bigint, null: false
+  column :chat,    :bigint, null: false
   column :kind,    :text,   null: false
-  column :step,    :text,   null: false
   column :payload, :jsonb
+
+  primary_key [ :user, :chat ]
 end

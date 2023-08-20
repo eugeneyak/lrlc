@@ -1,10 +1,19 @@
-# require_relative 'actions/test'
-
-# require_relative 'config/database'
-#
-# require_relative 'telegram'
+require_relative 'config/database'
+require_relative 'telegram'
 
 # bot = Telegram::Bot.new
+
+Telegram::Receiver::Polling.new.call
+
+# loop do
+#   updates = bot.updates
+#
+#   updates.each do |update|
+#     p update
+#     # Telegram::Update.new(update).call
+#   end
+# end
+
 
 # bot.message 250617930, "F",
 #   reply_markup: {
@@ -30,3 +39,6 @@
 # state = States::Receipt.first
 #
 # p state.vin
+
+
+# Update = Data.define(:id, :text)

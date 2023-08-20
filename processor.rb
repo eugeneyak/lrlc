@@ -1,22 +1,33 @@
 # frozen_string_literal: true
 
 class Processor
-  def initialize(message, from)
+  def initialize(message)
     @message = message
-    @from    = from
   end
 
-  attr_reader :message, :from
+  attr_reader :message
 
   def call
-    action.apply message, from
+    if message.command?
+      p message.command
+
+      case message.command
+      when :start
+        p "START"
+
+      when :receipt
+        p "RECEIPT"
+
+        State::Receipt.create(
+          user: message.from.id,
+          chat: message.chat.id
+        )
+      end
+
+    else
+
+    end
+
   end
 
-  def action
-    state = State.find(user: from.id) || State.create(user: from.id, step: :init)
-
-    ::Registry.instance
-      .find(state.class, state.step.to_sym)
-      .new(state)
-  end
 end
