@@ -1,10 +1,16 @@
 class Telegram::User
-  def initialize(id:, username: nil, **)
-    @id = id
-    @username = username
+  def initialize(id:, username: nil, first_name: nil, last_name: nil, **)
+    @id         = id
+    @username   = username
+    @first_name = first_name
+    @last_name  = last_name
   end
 
-  attr_reader :id, :username
+  attr_reader :id, :username, :first_name, :last_name
+
+  def name
+    "#{first_name} #{last_name}".strip
+  end
 end
 
 class Telegram::Chat

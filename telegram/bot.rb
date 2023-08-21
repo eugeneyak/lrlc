@@ -41,6 +41,12 @@ class Telegram::Bot
       message_id: message
   end
 
+  def dice(user)
+    client.post "sendDice",
+      chat_id: destination(user),
+      emoji: "🪙"
+  end
+
   private
 
   def destination(user)

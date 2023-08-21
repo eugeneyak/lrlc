@@ -5,14 +5,7 @@ bot = Telegram::Bot.new
 
 Telegram::Receiver::Polling.new.call
 
-# loop do
-#   updates = bot.updates
-#
-#   updates.each do |update|
-#     p update
-#     # Telegram::Update.new(update).call
-#   end
-# end
+
 
 
 # bot.message 250617930, "F",
@@ -32,7 +25,9 @@ Telegram::Receiver::Polling.new.call
 # ])
 
 
-# bot.text(250617930, "F")
+# bot.text(-984149820, "а")
+
+# bot.dice(-984149820)
 
 
 #

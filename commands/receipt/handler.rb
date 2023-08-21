@@ -8,6 +8,8 @@ module Command
       PHOTOS  = "photos"
       FINISH  = "Завершить"
 
+      GROUP   = -984149820
+
       def initialize(message, state)
         @message = message
         @state   = state
@@ -19,7 +21,10 @@ module Command
       def welcome
         state.update(step: VIN)
 
-        bot.message message.from, "Введи VIN"
+        bot.message message.from, "Введи VIN",
+          reply_markup: {
+            remove_keyboard: true,
+          }
       end
 
       def call
@@ -65,8 +70,6 @@ module Command
       def handle_photo
         state.photos ||= []
         state.photos << message.photo
-        state.photo_answered = true
-        state.save
 
         unless state.photo_answered
           bot.message message.from, "Пришли еще фотографии или нажми кнопку #{FINISH}",
@@ -76,15 +79,27 @@ module Command
               one_time_keyboard: true,
             }
         end
+
+        state.photo_answered = true
+        state.save
       end
 
       def handle_finish
-        state.delete
-
-        bot.message message.from, "Красава",
+        bot.message message.from, "Приемка завершена",
           reply_markup: {
             remove_keyboard: true,
           }
+
+        bot.media_group GROUP,
+          state.photos.map { |media| {  type: "photo", media: media } }
+
+        bot.message GROUP, <<~TEXT.strip
+          #{message.from.name} принял автомобиль
+          VIN: #{state.vin}
+          Пробег: #{state.mileage}
+        TEXT
+
+        state.delete
       end
     end
   end
