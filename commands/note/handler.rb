@@ -21,7 +21,9 @@ module Command
 
         bot.message message.from, "Введи VIN",
           reply_markup: {
-            remove_keyboard: true,
+            keyboard: Helper::VIS.candidates,
+            resize_keyboard: true,
+            one_time_keyboard: true,
           }
       end
 
@@ -33,7 +35,7 @@ module Command
       end
 
       def handle_vin
-        raise ArgumentError unless message.text.size == 8
+        raise ArgumentError if Helper::VIS.new(message.text).invalid?
 
         state.update(step: NOTE, vin: message.text)
         bot.message message.from, "Введи заметку"

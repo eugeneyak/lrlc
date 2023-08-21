@@ -165,3 +165,8 @@ DB.create_table :states, if_not_exists: true do
 
   primary_key [ :user, :chat ]
 end
+
+DB.create_table :vises, if_not_exists: true do
+  column :vis, :text, primary_key: true
+  column :last_handled_at, :timestamp
+end

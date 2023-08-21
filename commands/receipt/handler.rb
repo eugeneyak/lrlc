@@ -36,7 +36,7 @@ module Command
       end
 
       def handle_vin
-        raise ArgumentError unless message.text.size == 8
+        raise ArgumentError if Helper::VIS.new(message.text).invalid?
 
         state.update(step: MILEAGE, vin: message.text)
         bot.message message.from, "Введи пробег"
