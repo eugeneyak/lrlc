@@ -34,32 +34,32 @@ class Telegram::Bot
 
   def message(user, text, **payload)
     client.post "sendMessage",
-      chat_id: destination(user),
+      chat_id: addressee(user),
       text: text,
       **payload
   end
 
   def media_group(user, media)
     client.post "sendMediaGroup",
-      chat_id: destination(user),
+      chat_id: addressee(user),
       media: media
   end
 
   def delete(user, message)
     client.post "deleteMessage",
-      chat_id: destination(user),
+      chat_id: addressee(user),
       message_id: message
   end
 
   def dice(user)
     client.post "sendDice",
-      chat_id: destination(user),
+      chat_id: addressee(user),
       emoji: "🪙"
   end
 
   private
 
-  def destination(user)
+  def addressee(user)
     case user
     when Telegram::User
       user.id
