@@ -2,7 +2,7 @@
 
 module Helper
   class VIS
-    MATCHER = /[A-Z,0-9]/
+    MATCHER = /[A-Z0-9]{8}/
 
     def self.candidates
       DB.from(:vises)
@@ -20,7 +20,7 @@ module Helper
     attr_reader :vis
 
     def valid?
-      match = MATCHER === vis
+      match = MATCHER.match? vis
 
       if match
         DB.from(:vises)
