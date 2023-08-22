@@ -19,19 +19,19 @@ class Telegram::Client
     answer = connection
       .get(path: "bot#{token}/#{path}")
 
-    data = JSON.parse(answer.body, symbolize_names: true)
-
-    if data["ok"]
-      data["result"]
-    else
-      raise RuntimeError, data["description"]
-    end
+    handle answer
   end
 
   def post(path, **body)
     answer = connection
       .post(path: "bot#{token}/#{path}", body: JSON.generate(body))
 
+    handle answer
+  end
+
+  private
+
+  def handle(answer)
     data = JSON.parse(answer.body, symbolize_names: true)
 
     if data[:ok]
