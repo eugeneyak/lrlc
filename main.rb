@@ -3,10 +3,7 @@ require_relative 'telegram'
 
 bot = Telegram::Bot.new
 
-Telegram::Receiver::Polling.new.call
-
-
-
+bot.start!
 
 # bot.message 250617930, "F",
 #   reply_markup: {

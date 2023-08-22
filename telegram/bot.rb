@@ -9,6 +9,16 @@ class Telegram::Bot
 
   attr_reader :client
 
+  def start!
+    entrypoint = ENV["ENTRYPOINT"]
+
+    if entrypoint
+      Telegram::Receiver::Webhook.new(entrypoint).call
+    else
+      Telegram::Receiver::Polling.new.call
+    end
+  end
+
   def me
     data = client.get("getMe")
 
