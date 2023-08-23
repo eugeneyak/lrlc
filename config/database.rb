@@ -153,7 +153,7 @@ module Sequel::Plugins::StoreAccessors
   end
 end
 
-DB = Sequel.connect(ENV[:DATABASE_URL] || 'postgres://localhost:5432/lrlc')
+DB = Sequel.connect(ENV["DATABASE_URL"] || 'postgres://localhost:5432/lrlc')
 
 DB.extension :pg_json
 
