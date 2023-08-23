@@ -34,6 +34,14 @@ class Processor
 
       Command::Receipt::Handler.new(message, state).welcome
 
+    when :extradition
+      state = Command::Extradition::State.create(
+        user: message.from.id,
+        chat: message.chat.id
+      )
+
+      Command::Extradition::Handler.new(message, state).welcome
+
     when :notes
       state = Command::Note::State.create(
         user: message.from.id,
@@ -56,8 +64,12 @@ class Processor
       p "Command::Receipt::State DETECTED"
       Command::Receipt::Handler.new(message, state).call
 
+    when Command::Extradition::State
+      p "Command::Extradition::State DETECTED"
+      Command::Extradition::Handler.new(message, state).call
+
     when Command::Note::State
-      p "Command::Receipt::State DETECTED"
+      p "Command::Note::State DETECTED"
       Command::Note::Handler.new(message, state).call
 
     else
