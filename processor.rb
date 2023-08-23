@@ -42,6 +42,14 @@ class Processor
 
       Command::Extradition::Handler.new(message, state).welcome
 
+    when :replacement
+      state = Command::Replacement::State.create(
+        user: message.from.id,
+        chat: message.chat.id
+      )
+
+      Command::Replacement::Handler.new(message, state).welcome
+
     when :notes
       state = Command::Note::State.create(
         user: message.from.id,
@@ -67,6 +75,10 @@ class Processor
     when Command::Extradition::State
       p "Command::Extradition::State DETECTED"
       Command::Extradition::Handler.new(message, state).call
+
+    when Command::Replacement::State
+      p "Command::Extradition::State DETECTED"
+      Command::Replacement::Handler.new(message, state).call
 
     when Command::Note::State
       p "Command::Note::State DETECTED"
