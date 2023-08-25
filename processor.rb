@@ -8,16 +8,23 @@ class Processor
   attr_reader :message
 
   def call
-    p message
+    LRLC.logger.info
 
-    if message.command?
-      handle_command
-    else
-      handle_message
+    LRLC.logger.tagged(message.id, message.from.identifier) do
+      LRLC.logger.info message.from.inspect
+      LRLC.logger.info message.inspect
+
+      if message.command?
+        handle_command
+      else
+        handle_message
+      end
     end
   end
 
   def handle_command
+    LRLC.logger.info "Invoke #{message.command.inspect} command"
+
     DB.from(:states)
       .where(user: message.from.id, chat: message.chat.id)
       .delete
@@ -67,25 +74,23 @@ class Processor
       chat: message.chat.id
     )
 
+    LRLC.logger.info state.inspect
+
     case state
     when Command::Receipt::State
-      p "Command::Receipt::State DETECTED"
       Command::Receipt::Handler.new(message, state).call
 
     when Command::Extradition::State
-      p "Command::Extradition::State DETECTED"
       Command::Extradition::Handler.new(message, state).call
 
     when Command::Replacement::State
-      p "Command::Extradition::State DETECTED"
       Command::Replacement::Handler.new(message, state).call
 
     when Command::Note::State
-      p "Command::Note::State DETECTED"
       Command::Note::Handler.new(message, state).call
 
     else
-      p "NICHEGO NE DETCTED"
+      LRLC.logger.info "NICHEGO NE DETCTED"
     end
   end
 

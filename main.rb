@@ -1,5 +1,4 @@
-require_relative 'config/database'
-require_relative 'telegram'
+require_relative 'lrlc'
 
 bot = Telegram::Bot.new
 

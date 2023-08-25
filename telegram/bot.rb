@@ -13,8 +13,10 @@ class Telegram::Bot
     entrypoint = ENV["ENTRYPOINT"]
 
     if entrypoint
+      LRLC.logger.info "Webhook mode booting"
       Telegram::Receiver::Webhook.new(entrypoint).call
     else
+      LRLC.logger.info "Polling mode booting"
       Telegram::Receiver::Polling.new.call
     end
   end

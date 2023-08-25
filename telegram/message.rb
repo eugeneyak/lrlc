@@ -11,6 +11,10 @@ class Telegram::User
   def name
     "#{first_name} #{last_name}".strip
   end
+
+  def identifier
+    "#{name} : #{username}"
+  end
 end
 
 class Telegram::Chat
