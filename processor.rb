@@ -74,7 +74,7 @@ class Processor
       chat: message.chat.id
     )
 
-    LRLC.logger.info state.inspect
+    LRLC.logger.info state.inspect if state
 
     case state
     when Command::Receipt::State

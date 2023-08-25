@@ -87,19 +87,20 @@ module Command
       end
 
       def handle_finish
-        bot.message message.from, "Выдача автомобиля завершена",
-          reply_markup: {
-            remove_keyboard: true,
-          }
-
-        bot.media_group GROUP,
-          state.photos.map { |media| {  type: "photo", media: media } }
-
-        bot.message GROUP, <<~TEXT.strip
+        caption = <<~TEXT.strip
           #{message.from.name} выдал автомобиль
           VIN: #{state.vin}
           Пробег: #{state.mileage}
         TEXT
+
+        bot.media_group GROUP,
+          state.photos.map { |media| {  type: "photo", media: media } },
+          caption: caption
+
+        bot.message message.from, "Выдача автомобиля завершена",
+          reply_markup: {
+            remove_keyboard: true,
+          }
 
         state.delete
       end

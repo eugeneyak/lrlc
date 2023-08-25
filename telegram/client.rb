@@ -15,14 +15,17 @@ class Telegram::Client
 
   attr_reader :connection, :token
 
-  def get(path)
+  def get(path, **params)
     answer = connection
-      .get(path: "bot#{token}/#{path}")
+      .get(path: "bot#{token}/#{path}", query: params)
 
     handle answer
   end
 
   def post(path, **body)
+    LRLC.logger.debug "REQUEST TO TELEGRAM"
+    LRLC.logger.debug body.inspect
+
     answer = connection
       .post(path: "bot#{token}/#{path}", body: JSON.generate(body))
 

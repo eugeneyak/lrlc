@@ -47,17 +47,17 @@ module Command
       def handle_note
         state.update(note: message.text)
 
-        bot.message message.from, "Заметка создана",
-          reply_markup: {
-            remove_keyboard: true,
-          }
-
         bot.message GROUP, <<~TEXT.strip
           Заметка от #{message.from.name}
           VIN: #{state.vin}
 
           #{state.note}
         TEXT
+
+        bot.message message.from, "Заметка создана",
+          reply_markup: {
+            remove_keyboard: true,
+          }
       end
 
     end

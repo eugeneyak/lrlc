@@ -41,7 +41,11 @@ class Telegram::Bot
       **payload
   end
 
-  def media_group(user, media)
+  def media_group(user, media, caption: nil)
+    if caption
+      media.first[:caption] = caption
+    end
+
     client.post "sendMediaGroup",
       chat_id: addressee(user),
       media: media

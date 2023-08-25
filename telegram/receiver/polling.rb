@@ -11,7 +11,7 @@ module Telegram::Receiver
 
     def call
       loop do
-        updates = client.post "getUpdates", offset: offset
+        updates = client.get "getUpdates", offset: offset
 
         updates.each do |update|
           data = update.fetch(:message)
@@ -23,7 +23,7 @@ module Telegram::Receiver
           self.offset = update[:update_id]
         end
 
-      rescue OpenSSL::SSL::SSLError
+      rescue Excon::Error::Socket
         next
 
       rescue Interrupt

@@ -12,13 +12,13 @@ bot.start!
 # bot.media_group(250617930, [
 #   {
 #     type: "photo",
-#     media: "AgACAgIAAxkBAAIBuWTXX28TZV1eGCDyD7L6qMTqEjm9AAKG0DEbxm64SqbaRHQyrNm5AQADAgADcwADMAQ"
+#     media: "AgACAgIAAxkBAAOsZOkrfpjWUWYlpwABb8IyVMqQJO3RAAKEyjEbs7tIS6t3ZX2Gu_kMAQADAgADcwADMAQ",
 #   },
 #   {
 #     type: "photo",
-#     media: "AgACAgIAAxkBAAIBumTXX28pdPzfc-n0sxtp0hquR3wvAAIj0DEbxm7ASrBINgXGlz1mAQADAgADcwADMAQ"
+#     media: "AgACAgIAAxkBAAOtZOkrfpnhc9ssxrs4xExCEDy1ioIAAoXKMRuzu0hLQO-O-zaP5bQBAAMCAANzAAMwBA"
 #   }
-# ])
+# ], caption: "FUCK EACH")
 
 
 # bot.text(-984149820, "а")
