@@ -2,7 +2,7 @@
 
 module Helper
   class VIS
-    MATCHER = /[A-Z0-9]{8}/
+    MATCHER = /^[[:alnum:]]{8}$/
 
     def self.candidates
       DB.from(:vises)
@@ -20,9 +20,9 @@ module Helper
     attr_reader :vis
 
     def valid?
-      match = MATCHER.match? vis
+      matched = MATCHER === vis
 
-      if match
+      if matched
         DB.from(:vises)
           .insert_conflict(
             target: :vis,
@@ -31,7 +31,7 @@ module Helper
           .insert(vis: vis, last_handled_at: Time.now)
       end
 
-      match
+      matched
     end
 
     def invalid?
