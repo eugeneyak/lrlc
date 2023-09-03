@@ -4,32 +4,31 @@ require 'webrick'
 
 module Telegram::Receiver
   class Webhook
-    def initialize(entrypoint)
+    def initialize(client, entrypoint)
       @entrypoint = entrypoint
-
-      @client = Telegram::Client.new
-      @server = WEBrick::HTTPServer.new
+      @client     = client
+      @server     = WEBrick::HTTPServer.new
     end
 
     attr_reader :entrypoint, :client, :server
 
     def call
-      set_hook
-
       server.mount_proc '/' do |req, _res|
         update = JSON
           .parse(req.body, symbolize_names: true)
           .fetch(:message)
 
-        message = Telegram::Message.new(**update)
+        LRLC.logger.info update
 
-        ::Processor.new(message).call
+        yield Telegram::Message.new(**update)
       end
 
       trap('INT') do
         server.shutdown
         delete_hook
       end
+
+      set_hook
 
       server.start
     end

@@ -11,7 +11,6 @@ class Processor
     LRLC.logger.info
 
     LRLC.logger.tagged(message.id, message.from.identifier) do
-      LRLC.logger.info message.from.inspect
       LRLC.logger.info message.inspect
 
       if message.command?

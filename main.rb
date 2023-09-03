@@ -1,8 +1,15 @@
 require_relative 'lrlc'
 
-bot = Telegram::Bot.new
+token      = ENV["TOKEN"]
+entrypoint = ENV["ENTRYPOINT"]
 
-bot.start!
+bot = Telegram::Bot.new(token, entrypoint: entrypoint)
+
+# bot.start! do |message|
+#   ::Processor.new(message).call
+# end
+
+bot.message 250617930, "F"
 
 # bot.message 250617930, "F",
 #   reply_markup: {

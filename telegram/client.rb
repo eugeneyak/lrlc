@@ -4,8 +4,8 @@ require 'excon'
 require 'json'
 
 class Telegram::Client
-  def initialize
-    @token = ENV.fetch("TOKEN")
+  def initialize(token)
+    @token = token
     @connection = Excon.new(
       "https://api.telegram.org",
       persistent: true,
@@ -23,8 +23,7 @@ class Telegram::Client
   end
 
   def post(path, **body)
-    LRLC.logger.debug "REQUEST TO TELEGRAM"
-    LRLC.logger.debug body.inspect
+    LRLC.logger.info "TG API Request : #{path.inspect} : #{body.inspect}"
 
     answer = connection
       .post(path: "bot#{token}/#{path}", body: JSON.generate(body))
@@ -36,6 +35,8 @@ class Telegram::Client
 
   def handle(answer)
     data = JSON.parse(answer.body, symbolize_names: true)
+
+    LRLC.logger.info "TG API Response : #{data}"
 
     if data[:ok]
       data[:result]

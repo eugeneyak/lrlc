@@ -3,21 +3,20 @@
 require_relative 'client'
 
 class Telegram::Bot
-  def initialize
-    @client = Telegram::Client.new
+  def initialize(token, entrypoint: nil)
+    @client = Telegram::Client.new(token)
+    @entrypoint = entrypoint
   end
 
-  attr_reader :client
+  attr_reader :client, :entrypoint
 
-  def start!
-    entrypoint = ENV["ENTRYPOINT"]
-
+  def start!(&yielder)
     if entrypoint
       LRLC.logger.info "Webhook mode booting"
-      Telegram::Receiver::Webhook.new(entrypoint).call
+      Telegram::Receiver::Webhook.new(client, entrypoint).call(&yielder)
     else
       LRLC.logger.info "Polling mode booting"
-      Telegram::Receiver::Polling.new.call
+      Telegram::Receiver::Polling.new(client).call(&yielder)
     end
   end
 

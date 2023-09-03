@@ -2,8 +2,8 @@
 
 module Telegram::Receiver
   class Polling
-    def initialize
-      @client = Telegram::Client.new
+    def initialize(client)
+      @client = client
       @offset = nil
     end
 
@@ -16,11 +16,9 @@ module Telegram::Receiver
         updates.each do |update|
           data = update.fetch(:message)
 
-          message = Telegram::Message.new(**data)
+          yield Telegram::Message.new(**data)
 
-          ::Processor.new(message).call
-
-          self.offset = update[:update_id]
+          read update[:update_id]
         end
 
       rescue Excon::Error::Socket
@@ -31,7 +29,7 @@ module Telegram::Receiver
       end
     end
 
-    def offset=(last)
+    def read(last)
       @offset = last + 1
     end
   end
