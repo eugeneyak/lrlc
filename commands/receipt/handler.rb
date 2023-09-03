@@ -86,13 +86,13 @@ module Command
 
       def handle_finish
         caption = <<~TEXT.strip
-          #{message.from.name} принял автомобиль
+          [#{message.from.name}](#{message.from.link}) принял автомобиль
           VIN: #{state.vin}
-          Пробег: #{state.mileage}
+          Пробег: #{state.mileage} км
         TEXT
 
         bot.media_group GROUP,
-          state.photos.first(10).map { |media| {  type: "photo", media: media } },
+          state.photos.first(10).map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
           caption: caption
 
         bot.message message.from, "Приемка завершена",

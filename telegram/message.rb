@@ -15,6 +15,10 @@ class Telegram::User
   def identifier
     "#{name} : #{username}"
   end
+
+  def link
+    "tg://user?id=#{id}"
+  end
 end
 
 class Telegram::Chat

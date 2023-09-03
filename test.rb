@@ -2,9 +2,10 @@ require_relative 'lrlc'
 
 token = ENV["TOKEN"]
 
-bot = Telegram::Bot.new(token, entrypoint: entrypoint)
+bot = Telegram::Bot.new(token)
 
-bot.message 250617930, "F"
+bot.message 250617930, "F [ME](tg://user?id=250617930)",
+  parse_mode: "MarkdownV2"
 
 # bot.message 250617930, "F",
 #   reply_markup: {

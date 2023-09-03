@@ -47,8 +47,8 @@ module Command
       def handle_note
         state.update(note: message.text)
 
-        bot.message GROUP, <<~TEXT.strip
-          Заметка от #{message.from.name}
+        bot.message GROUP, <<~TEXT.strip, parse_mode: "MarkdownV2"
+          Заметка от [#{message.from.name}](#{message.from.link})
           VIN: #{state.vin}
 
           #{state.note}
