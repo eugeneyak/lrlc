@@ -6,7 +6,7 @@ entrypoint = ENV["ENTRYPOINT"]
 bot = Telegram::Bot.new(token, entrypoint: entrypoint)
 
 bot.start! do |message|
-  ::Processor.new(message).call
+  ::Processor.new(message, bot).call
 end
 
 # bot.message 250617930, "F"

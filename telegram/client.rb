@@ -18,6 +18,7 @@ class Telegram::Client
   def get(path, **params)
     answer = connection
       .get(path: "bot#{token}/#{path}", query: params)
+      .then { |response| JSON.parse(response.body, symbolize_names: true) }
 
     handle answer
   end
@@ -27,6 +28,9 @@ class Telegram::Client
 
     answer = connection
       .post(path: "bot#{token}/#{path}", body: JSON.generate(body))
+      .then { |response| JSON.parse(response.body, symbolize_names: true) }
+
+    LRLC.logger.info "TG API Response : #{answer}"
 
     handle answer
   end
@@ -34,14 +38,10 @@ class Telegram::Client
   private
 
   def handle(answer)
-    data = JSON.parse(answer.body, symbolize_names: true)
-
-    LRLC.logger.info "TG API Response : #{data}"
-
-    if data[:ok]
-      data[:result]
+    if answer[:ok]
+      answer[:result]
     else
-      raise RuntimeError, data[:description]
+      raise RuntimeError, answer[:description]
     end
   end
 end

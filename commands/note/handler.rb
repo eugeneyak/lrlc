@@ -8,10 +8,10 @@ module Command
 
       GROUP = -984149820
 
-      def initialize(message, state)
+      def initialize(message, state, bot)
         @message = message
         @state   = state
-        @bot     = Telegram::Bot.new
+        @bot     = bot
       end
 
       attr_reader :message, :state, :bot

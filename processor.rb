@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Processor
-  def initialize(message)
+  def initialize(message, bot)
     @message = message
+    @bot = bot
   end
 
-  attr_reader :message
+  attr_reader :message, :bot
 
   def call
     LRLC.logger.info
@@ -38,7 +39,7 @@ class Processor
         chat: message.chat.id
       )
 
-      Command::Receipt::Handler.new(message, state).welcome
+      Command::Receipt::Handler.new(message, state, bot).welcome
 
     when :extradition
       state = Command::Extradition::State.create(
@@ -46,7 +47,7 @@ class Processor
         chat: message.chat.id
       )
 
-      Command::Extradition::Handler.new(message, state).welcome
+      Command::Extradition::Handler.new(message, state, bot).welcome
 
     when :replacement
       state = Command::Replacement::State.create(
@@ -54,7 +55,7 @@ class Processor
         chat: message.chat.id
       )
 
-      Command::Replacement::Handler.new(message, state).welcome
+      Command::Replacement::Handler.new(message, state, bot).welcome
 
     when :notes
       state = Command::Note::State.create(
@@ -62,7 +63,7 @@ class Processor
         chat: message.chat.id
       )
 
-      Command::Note::Handler.new(message, state).welcome
+      Command::Note::Handler.new(message, state, bot).welcome
     end
 
   end
@@ -77,16 +78,16 @@ class Processor
 
     case state
     when Command::Receipt::State
-      Command::Receipt::Handler.new(message, state).call
+      Command::Receipt::Handler.new(message, state, bot).call
 
     when Command::Extradition::State
-      Command::Extradition::Handler.new(message, state).call
+      Command::Extradition::Handler.new(message, state, bot).call
 
     when Command::Replacement::State
-      Command::Replacement::Handler.new(message, state).call
+      Command::Replacement::Handler.new(message, state, bot).call
 
     when Command::Note::State
-      Command::Note::Handler.new(message, state).call
+      Command::Note::Handler.new(message, state, bot).call
 
     else
       LRLC.logger.info "NICHEGO NE DETCTED"
