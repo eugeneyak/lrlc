@@ -91,8 +91,15 @@ module Command
           Пробег: #{state.mileage} км
         TEXT
 
+        *images_without_caption, images_with_caption = state.photos.each_slice(10).to_a
+
+        images_without_caption.each do |photo_group|
+          bot.media_group GROUP,
+            photo_group.map { {  type: "photo", media: _1 } }
+        end
+
         bot.media_group GROUP,
-          state.photos.first(10).map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
+          images_with_caption.map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
           caption: caption
 
         bot.message message.from, "Приемка завершена",
