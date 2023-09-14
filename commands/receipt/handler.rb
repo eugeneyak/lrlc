@@ -8,7 +8,10 @@ module Command
       PHOTOS  = "photos"
       FINISH  = "Завершить"
 
-      GROUP   = -984149820
+      DESTINATIONS = [
+        -984149820,
+        -1001692481789,
+      ]
 
       def initialize(message, state, bot)
         @message = message
@@ -93,14 +96,16 @@ module Command
 
         *images_without_caption, images_with_caption = state.photos.each_slice(10).to_a
 
-        images_without_caption.each do |photo_group|
-          bot.media_group GROUP,
-            photo_group.map { {  type: "photo", media: _1 } }
-        end
+        DESTINATIONS.each do |dest|
+          images_without_caption.each do |photo_group|
+            bot.media_group dest,
+              photo_group.map { {  type: "photo", media: _1 } }
+          end
 
-        bot.media_group GROUP,
-          images_with_caption.map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
-          caption: caption
+          bot.media_group dest,
+            images_with_caption.map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
+            caption: caption
+        end
 
         bot.message message.from, "Приемка завершена",
           reply_markup: {

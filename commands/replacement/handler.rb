@@ -8,7 +8,10 @@ module Command
       PHOTOS  = "photos"
       FINISH  = "Завершить"
 
-      GROUP   = -984149820
+      DESTINATIONS = [
+        -984149820,
+        -1001692481789,
+      ]
 
       def initialize(message, state, bot)
         @message = message
@@ -93,9 +96,11 @@ module Command
           Пробег: #{state.mileage}
         TEXT
 
-        bot.media_group GROUP,
-          state.photos.first(10).map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
-          caption: caption
+        DESTINATIONS.each do |dest|
+          bot.media_group dest,
+            state.photos.first(10).map { {  type: "photo", media: _1, parse_mode: "MarkdownV2" } },
+            caption: caption
+        end
 
         bot.message message.from, "Выдача подменного автомобиля завершена",
           reply_markup: {

@@ -6,7 +6,10 @@ module Command
       VIN  = "vin"
       NOTE = "mileage"
 
-      GROUP = -984149820
+      DESTINATIONS = [
+        -984149820,
+        -1001692481789,
+      ]
 
       def initialize(message, state, bot)
         @message = message
@@ -47,12 +50,14 @@ module Command
       def handle_note
         state.update(note: message.text)
 
-        bot.message GROUP, <<~TEXT.strip, parse_mode: "MarkdownV2"
+        DESTINATIONS.each do |dest|
+          bot.message dest, <<~TEXT.strip, parse_mode: "MarkdownV2"
           Заметка от [#{message.from.name}](#{message.from.link})
           VIN: #{state.vin}
 
           #{state.note}
-        TEXT
+          TEXT
+        end
 
         bot.message message.from, "Заметка создана",
           reply_markup: {
