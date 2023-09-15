@@ -9,7 +9,7 @@ module Command
       FINISH  = "Завершить"
 
       DESTINATIONS = [
-        -984149820,
+        -1001822886567,
         -1001692481789,
       ]
 
