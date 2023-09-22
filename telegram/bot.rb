@@ -1,36 +1,45 @@
 # frozen_string_literal: true
 
+require_relative 'config'
 require_relative 'client'
 
+require_relative 'info'
+
 class Telegram::Bot
-  def initialize(token, entrypoint: nil)
-    @client = Telegram::Client.new(token)
-    @entrypoint = entrypoint
+  def initialize(token, **conf)
+    self.client = Telegram::Client.new(token)
+    self.config = Telegram::Config.new(**conf)
+
+    yield config
   end
 
-  attr_reader :client, :entrypoint
+  attr_reader :client, :config
 
   def start!(&yielder)
-    if entrypoint
-      LRLC.logger.info "Webhook mode booting"
-      Telegram::Receiver::Webhook.new(client, entrypoint).call(&yielder)
-    else
-      LRLC.logger.info "Polling mode booting"
-      Telegram::Receiver::Polling.new(client).call(&yielder)
+    me.then do |info|
+      config.logger.info "#{info.name}"
+      config.logger.info "ID: #{info.id}"
+      config.logger.info "Username: #{info.username}"
+      config.logger.info "Can join groups: #{info.can_join_groups}"
+      config.logger.info "Can read all group messages: #{info.can_read_all_group_messages}"
+      config.logger.info "Supports inline queries: #{info.supports_inline_queries}"
     end
+
+    receiver = 
+      if config.entrypoint.present?
+        Telegram::Receiver::Webhook.new(client, config.entrypoint)
+      else
+        Telegram::Receiver::Polling.new(client)
+      end
+
+    config.logger.info "Use #{receiver.class}"
+    receiver.call(&yielder)
   end
 
   def me
-    data = client.get("getMe")
-
-    Telegram::Data::Bot.new(
-      id: data["id"],
-      bot: data["is_bot"],
-      name: data["first_name"],
-      username: data["username"],
-      can_join_groups: data["can_join_groups"],
-      can_read_all_group_messages: data["can_read_all_group_messages"],
-    )
+    client
+      .then { _1.get("getMe") }
+      .then { Telegram::Info.new(**_1) }
   end
 
   def message(user, text, **payload)
