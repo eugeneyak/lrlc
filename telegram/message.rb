@@ -13,7 +13,7 @@ class Telegram::User
   end
 
   def identifier
-    "#{name} : #{username}"
+    "#{id}:#{name}"
   end
 
   def link
@@ -40,6 +40,10 @@ class Telegram::Message
   end
 
   attr_reader :id, :from, :chat, :payload
+
+  def to_h
+    payload
+  end
 
   def text?
     !!text

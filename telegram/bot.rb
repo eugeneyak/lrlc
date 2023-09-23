@@ -3,6 +3,8 @@
 require_relative 'config'
 require_relative 'client'
 
+require_relative 'receiver'
+
 require_relative 'info'
 
 class Telegram::Bot
@@ -16,13 +18,6 @@ class Telegram::Bot
   attr_reader :client, :config
 
   def start!(&yielder)
-    receiver =
-      if config.entrypoint.present?
-        Telegram::Receiver::Webhook.new(client, config.entrypoint)
-      else
-        Telegram::Receiver::Polling.new(client)
-      end
-
     me.then do |info|
       config.logger.info "#{info.name}"
       config.logger.info "ID: #{info.id}"
@@ -32,9 +27,7 @@ class Telegram::Bot
       config.logger.info "Supports inline queries: #{info.supports_inline_queries}"
     end
 
-    config.logger.info "Use #{receiver.class} strategy"
-
-    receiver.call(&yielder)
+    Telegram::Receiver.new(client, config).call(&yielder)
   end
 
   def me

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Telegram::Receiver
+module Telegram::Receivers
   class Polling
     def initialize(client)
       @client = client

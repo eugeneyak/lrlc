@@ -6,5 +6,10 @@ class Telegram::Config
     self.entrypoint = entrypoint
   end
   
-  attr_accessor :logger, :entrypoint
+  attr_accessor :entrypoint
+  attr_reader :logger
+
+  def logger=(logger)
+    @logger = ActiveSupport::TaggedLogging.new(logger)
+  end
 end

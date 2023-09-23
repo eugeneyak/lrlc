@@ -2,7 +2,7 @@
 
 require 'webrick'
 
-module Telegram::Receiver
+module Telegram::Receivers
   class Webhook
     def initialize(client, entrypoint)
       @entrypoint = entrypoint

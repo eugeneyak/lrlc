@@ -9,16 +9,10 @@ class Processor
   attr_reader :message, :bot
 
   def call
-    LRLC.logger.info
-
-    LRLC.logger.tagged(message.id, message.from.identifier) do
-      LRLC.logger.info message.inspect
-
-      if message.command?
-        handle_command
-      else
-        handle_message
-      end
+    if message.command?
+      handle_command
+    else
+      handle_message
     end
   end
 
