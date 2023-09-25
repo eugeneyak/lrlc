@@ -7,7 +7,6 @@ module Command
       NOTE = "mileage"
 
       DESTINATIONS = [
-        -1001822886567,
         -1001692481789,
       ]
 
