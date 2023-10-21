@@ -21,6 +21,8 @@ module Telegram::Receiver
         LRLC.logger.info update
 
         yield Telegram::Message.new(**update)
+
+        GC.start
       end
 
       trap('INT') do

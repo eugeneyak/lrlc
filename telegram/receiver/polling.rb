@@ -19,6 +19,8 @@ module Telegram::Receiver
           yield Telegram::Message.new(**data)
 
           read update[:update_id]
+
+          GC.start
         end
 
       rescue Excon::Error::Socket
