@@ -11,7 +11,7 @@ module Telegram::Receiver
 
     def call
       loop do
-        updates = client.get "getUpdates", offset: offset
+        updates = client.get "getUpdates", offset: offset, timeout: 100
 
         updates.each do |update|
           data = update.fetch(:message)
@@ -19,9 +19,9 @@ module Telegram::Receiver
           yield Telegram::Message.new(**data)
 
           read update[:update_id]
-
-          GC.start
         end
+
+      GC.start
 
       rescue Excon::Error::Socket
         next
