@@ -23,7 +23,7 @@ class Processor
   end
 
   def handle_command
-    LRLC.logger.info "Invoke #{message.command.inspect} command"
+    LRLC.logger.info "Try to invoke #{message.command.inspect} command"
 
     DB.from(:states)
       .where(user: message.from.id, chat: message.chat.id)
@@ -72,6 +72,8 @@ class Processor
       )
 
       Command::Note::Handler.new(message, state, bot).welcome
+    else
+      LRLC.logger.info "Command #{message.command.inspect} not found"
     end
 
   end
