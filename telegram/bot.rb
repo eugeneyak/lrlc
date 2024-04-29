@@ -62,6 +62,12 @@ class Telegram::Bot
       emoji: "🪙"
   end
 
+  def answer_callback_query(id, text: nil)
+    client.post "answerCallbackQuery",
+      callback_query_id: id,
+      text: text
+  end
+
   private
 
   def addressee(user)

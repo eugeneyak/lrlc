@@ -73,6 +73,8 @@ module Command
           needs_odometer: ["Эвакуация Платформа", "Эвакуация Манипулятор"].include?(message.text)
         )
 
+        bot.answer_callback_query message.id
+
         bot.message message.from, "Записал #{message.text}"
         bot.message message.from, "Марка автомобиля"
       end
