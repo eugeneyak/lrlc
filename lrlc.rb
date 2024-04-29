@@ -17,6 +17,8 @@ module LRLC
     require 'active_support/tagged_logging'
 
     @logger ||= begin
+      STDOUT.sync = true
+
       logger = Logger.new(STDOUT)
       logger.formatter = Logger::Formatter.new
 
