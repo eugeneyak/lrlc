@@ -30,6 +30,30 @@ class Telegram::Chat
   attr_reader :id, :type
 end
 
+class Telegram::CallbackQuery
+  def initialize(id:, from:, message:, data:, **payload)
+    @id = id
+    @from = Telegram::User.new(**from)
+    @message = Telegram::Message.new(**message)
+    @data = data
+    @payload = payload
+  end
+
+  attr_reader :id, :from, :message, :data, :payload
+
+  def text
+    @data
+  end
+
+  def chat
+    message.chat
+  end
+
+  def command? = false
+
+  def photo? = false
+end
+
 class Telegram::Message
   def initialize(message_id:, from:, chat:, date:, **payload)
     @id = message_id

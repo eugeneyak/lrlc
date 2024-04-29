@@ -41,6 +41,14 @@ class Processor
 
       Command::Receipt::Handler.new(message, state, bot).welcome
 
+    when :maintenance
+      state = Command::Maintenance::State.create(
+        user: message.from.id,
+        chat: message.chat.id
+      )
+
+      Command::Maintenance::Handler.new(message, state, bot).welcome
+
     when :extradition
       state = Command::Extradition::State.create(
         user: message.from.id,
@@ -80,6 +88,9 @@ class Processor
     when Command::Receipt::State
       Command::Receipt::Handler.new(message, state, bot).call
 
+    when Command::Maintenance::State
+      Command::Maintenance::Handler.new(message, state, bot).call
+
     when Command::Extradition::State
       Command::Extradition::Handler.new(message, state, bot).call
 
@@ -91,6 +102,12 @@ class Processor
 
     else
       LRLC.logger.info "NICHEGO NE DETCTED"
+    end
+
+    begin
+      LRLC.logger.info state.reload.inspect if state
+    rescue Sequel::NoExistingObject
+      :noop
     end
   end
 

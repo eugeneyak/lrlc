@@ -14,9 +14,13 @@ module Telegram::Receiver
         updates = client.get "getUpdates", offset: offset, timeout: 100
 
         updates.each do |update|
-          data = update.fetch(:message)
+          update[:message].tap do |data|
+            yield Telegram::Message.new(**data) if data.present?
+          end
 
-          yield Telegram::Message.new(**data)
+          update[:callback_query].tap do |data|
+            yield Telegram::CallbackQuery.new(**data) if data.present?
+          end
 
           read update[:update_id]
         end
