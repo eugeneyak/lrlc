@@ -11,9 +11,9 @@ module Telegram::Receiver
 
     def call
       loop do
-        updates = client.get "getUpdates", offset: offset, timeout: 100
-
         updates.each do |update|
+          LRLC.logger.debug "Getting update: #{update.inspect}"
+
           update[:message].tap do |data|
             yield Telegram::Message.new(**data) if data.present?
           end
@@ -25,7 +25,7 @@ module Telegram::Receiver
           read update[:update_id]
         end
 
-      GC.start
+        GC.start
 
       rescue Excon::Error::Socket
         next
@@ -33,6 +33,10 @@ module Telegram::Receiver
       rescue Interrupt
         exit true
       end
+    end
+
+    def updates
+      client.get "getUpdates", offset: offset, timeout: 100
     end
 
     def read(last)
