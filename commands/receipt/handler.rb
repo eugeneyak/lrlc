@@ -4,7 +4,6 @@ module Command
   module Receipt
     class Handler
       VIN     = "vin"
-      MILEAGE = "mileage"
       PHOTOS  = "photos"
       FINISH  = "Завершить"
 
@@ -32,7 +31,6 @@ module Command
       def call
         case state.step
         when VIN     then handle_vin
-        when MILEAGE then handle_mileage
         when PHOTOS  then handle_photos
         end
       end
@@ -40,23 +38,11 @@ module Command
       def handle_vin
         raise ArgumentError if Helper::VIS.new(message.text).invalid?
 
-        state.update(step: MILEAGE, vin: message.text)
-        bot.message message.from, "Введи пробег"
-
-      rescue ArgumentError
-        bot.message message.from, "VIN должен быть длиной ровно 8 символов"
-      end
-
-      def handle_mileage
-        mileage = Integer(message.text)
-
-        raise ArgumentError if mileage <= 0
-
-        state.update(step: PHOTOS, mileage: mileage)
+        state.update(step: PHOTOS, vin: message.text)
         bot.message message.from, "Пришли фотографии"
 
       rescue ArgumentError
-        bot.message message.from, "Пробег должен быть числом больше 0"
+        bot.message message.from, "VIN должен быть длиной ровно 8 символов"
       end
 
       def handle_photos
@@ -90,7 +76,6 @@ module Command
         caption = <<~TEXT.strip
           [#{message.from.name}](#{message.from.link}) принял автомобиль
           VIN: #{state.vin}
-          Пробег: #{state.mileage} км
         TEXT
 
         *images_without_caption, images_with_caption = state.photos.each_slice(10).to_a
