@@ -38,7 +38,7 @@ module Command
       def handle_vin
         raise ArgumentError if Helper::VIS.new(message.text).invalid?
 
-        state.update(step: PHOTOS, vin: message.text)
+        state.update(step: PHOTOS, vin: message.text.upcase)
         bot.message message.from, "Пришли фотографии"
 
       rescue ArgumentError
