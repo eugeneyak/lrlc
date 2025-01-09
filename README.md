@@ -7,4 +7,4 @@
 
 ### Upgrade ruby version
 
-    mise use ruby@3.3.1
+    mise use ruby@3.4.1

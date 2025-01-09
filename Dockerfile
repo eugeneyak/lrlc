@@ -1,4 +1,4 @@
-FROM ruby:3.2.0-alpine AS builder
+FROM ruby:3.4.1-alpine AS builder
 
 RUN apk -U upgrade && apk add --no-cache \
    build-base libpq-dev
@@ -11,4 +11,4 @@ RUN gem install bundler --no-document && bundle install
 
 COPY . ./
 
-CMD ["bundle", "exec", "ruby", "main.rb"]
+CMD ["bundle", "exec", "ruby", "--yjit", "main.rb"]
